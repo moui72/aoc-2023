@@ -2,6 +2,7 @@ package util
 
 import (
 	"bufio"
+	"log"
 	"os"
 )
 
@@ -21,4 +22,17 @@ func ReadFileToScanner(path string) (*os.File, *bufio.Scanner, error) {
 	}
 	scanner := bufio.NewScanner(file)
 	return file, scanner, nil
+}
+
+func LineCount(path string) int {
+	f, scanner, err := ReadFileToScanner(path)
+	defer f.Close()
+	if err != nil {
+			log.Fatal(err)
+	}
+	n := 0
+	for scanner.Scan() {
+		n += 1
+	}
+	return n
 }
