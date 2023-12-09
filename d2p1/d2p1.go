@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var path string = "../inputs/d2p1.txt"
+var path string = util.RelativePathTo("inputs/d3.txt")
 
 func isPossible(rules map[string]int, game map[string]int) (bool, string) {
 	for color, max := range rules {

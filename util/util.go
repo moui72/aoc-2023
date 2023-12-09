@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 // ReverseRunes returns its argument string reversed rune-wise left to right.
@@ -35,4 +36,13 @@ func LineCount(path string) int {
 		n += 1
 	}
 	return n
+}
+
+func GetCurrentFilePath() string {
+	pwd, _ := os.Getwd()
+	return pwd
+}
+
+func RelativePathTo(path string) string {
+	return filepath.Join(GetCurrentFilePath(), path)
 }

@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var path string = "../inputs/d2p1.txt"
+var path string = util.RelativePathTo("inputs/d3.txt")
 
 func powerOfSet(cubes map[string]int) int {
 	result := 1

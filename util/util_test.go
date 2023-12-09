@@ -1,10 +1,12 @@
 package util
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestReadFileToScanner(t *testing.T) {
 	expectedValues := [2]string{"line one", "line two"}
-	f, scanner, err := ReadFileToScanner("../inputs/test.txt")
+	f, scanner, err := ReadFileToScanner(util.RelativePathTo("inputs/d3.txt"))
 	defer f.Close()
 	if err != nil {
 		t.Fatalf(`ReadFileToScanner("inputs/test.txt") produced error %v`, err)

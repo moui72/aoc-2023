@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-var path string = "../inputs/d3.txt"
+var path string = util.RelativePathTo("inputs/d3.txt")
 
 var addressFmt string = "%d,%d-%d"
 

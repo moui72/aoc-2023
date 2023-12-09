@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var path string = "../inputs/d1p1.txt"
+var path string = util.RelativePathTo("inputs/d3.txt")
 var digits string = "0123456789"
 
 func main() {
