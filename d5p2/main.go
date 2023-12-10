@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"moui72/aoc-2023/util"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -79,44 +80,72 @@ func main() {
 		}
 		prevLineBlank = false
 	}
-	seedToLoc := map[int]int{}
-	lowestLoc := maxVal
 
-	seeds := make([]int, len(rawSeedsData))
-	for idx, val := range rawSeedsData {
-		numVal := parseIntOrRaise(val)
-		if idx % 2 == 0 {
-			seeds = append(seeds, numVal)
-		} else {
-			seeds = append(seeds, seeds[idx] + numVal)
 
-		}
+	reverseMapOrder := make(map[string]string, len(mapOrder))
+	for src, dst := range mapOrder {
+		reverseMapOrder[dst] = src
 	}
-	for _, seed := range seeds {
-		next := "seed"
-		val := seed
-		fmt.Printf("Locating seed %s ...\n", seed)
-		
-		for loops := 0; loops < max_loops; loops++ {
-			src := next
-			next = mapOrder[next]
-			if next == "" {
-				continue
-			}
-			dst := next
+	seeds := make([][]string, 0, len(rawSeedsData) / 2)
+	for idx := 0; idx < len(rawSeedsData); idx += 2 {
+		seeds = append(seeds, rawSeedsData[idx:idx+2])
+	}
+	result := maxVal
+	prevVal := 0
+	src := ""
+	diff := 0
+	println("---")
+	fmt.Printf("Searching from %d to %d\n", prevVal, result)
+	entryDst := 0
+	entrySrc := 0
+	//entryRng := 0
+	chunk := maxVal / 100
+	fmt.Print("[")
+	for lowestLoc := 0; lowestLoc < result; lowestLoc++ {
+		dst := "location"
+		val := lowestLoc
+		for dst != "" {
+			src = reverseMapOrder[dst]
+			slices.Reverse(almanac[src][dst])
 			for _, entry := range almanac[src][dst] {
-				if val >= entry["src"] && val < entry["src"] + entry["range"] {
-					fmt.Printf("\n  - %d > %d >= %d\n", entry["src"] + entry["range"], val, entry["src"])
-					val = val - (entry["src"] - entry["dst"])
+				prevVal = val
+
+				if val >= entry["dst"] && val < entry["dst"] + entry["range"] {
+					// dst src rng
+					// 1   0   69
+					// -1
+					entryDst = entry["dst"]
+					entrySrc = entry["src"]
+					//entryRng = entry["range"]
+					diff = entryDst - entrySrc
+					val = val - diff
 					break
 				}
 			}
-			fmt.Printf("    - Seed %s needs %s %d\n", seed, next, val)
+			// fmt.Printf("%s, %d -> %d: %d -> %d; ", src, entryDst, entryDst + entryRng, prevVal, val)
+			entryDst = 0
+			entrySrc = 0
+			//entryRng = 0
+			dst = src
 		}
-		seedToLoc[seed] = val
-		if val < lowestLoc {
-			lowestLoc = val
+		// fmt.Printf("\nlocation %d belongs to seed %d\n", lowestLoc, val)
+		for _, seedRange := range seeds {
+			startSeed := parseIntOrRaise(seedRange[0])
+			endSeed := startSeed + parseIntOrRaise(seedRange[1])
+			// fmt.Printf("seed range %d ... %d\n", startSeed, endSeed)
+			if val >= startSeed && val < endSeed {
+				// fmt.Printf("found! %d: %d\n", lowestLoc, val)
+				result = lowestLoc
+				break
+			}
+		}
+		if lowestLoc == result {
+			break
+		}
+		if lowestLoc % chunk == 0 {
+			fmt.Print("=", lowestLoc/chunk)
 		}
 	}
-	fmt.Printf("The lowest numbered location for any of the seeds to be planted is %d\n", lowestLoc)
+	fmt.Println("]")
+	fmt.Printf("The lowest numbered location for any of the seeds to be planted is %d\n", result)
 }

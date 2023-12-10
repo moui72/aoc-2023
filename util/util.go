@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 )
 
 // ReverseRunes returns its argument string reversed rune-wise left to right.
@@ -45,4 +46,12 @@ func GetCurrentFilePath() string {
 
 func RelativePathTo(path string) string {
 	return filepath.Join(GetCurrentFilePath(), path)
+}
+
+func ParseIntOrRaise(input string) int {
+	str, err := strconv.Atoi(input)
+	if err != nil {
+		panic(err)
+	}
+	return str
 }
