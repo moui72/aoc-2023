@@ -32,7 +32,7 @@ func parseRaces(scanner *bufio.Scanner) []map[string]int {
 		if text == "" {
 			continue
 		}
-		text = multipleSpaces.ReplaceAllString(text, " ")
+		text = multipleSpaces.ReplaceAllString(text, "")
 		_, line, ok := strings.Cut(text, ":")
 		if ok != true {
 			panic(text)
