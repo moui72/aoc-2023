@@ -24,20 +24,26 @@ func main() {
 
 	scanner.Scan()
 	directions := scanner.Text()
-	desertMap := map[string]map[rune]string
+	desertMap := map[string]map[rune]string{}
 
 	for scanner.Scan() {
 		text := scanner.Text()
-		node, children, _ := strings.Cut(text, " = ")
-		L, R, _ := strings.Cut(children, ", ")
-		desertMap[node] = map[rune]string{'L': L[1:], 'R': R[:len(R)-1]}
+		if text != "" {
+			node, children, _ := strings.Cut(text, " = ")
+			L, R, _ := strings.Cut(children, ", ")
+			desertMap[node] = map[rune]string{'L': L[1:], 'R': R[:len(R)-1]}
+		}
 	}
 	loc := "AAA"
 	steps := 0
+	fmt.Printf("%s", loc)
 	for loc != "ZZZ" {
+		println("↓")
 		for _, d := range directions {
 			steps += 1
 			loc = desertMap[loc][d]
+			fmt.Printf("-%s->%s", string(d), loc)
 		}
 	}
+	fmt.Printf("\nIt took %d steps to reach ZZZ\n", steps)
 }
