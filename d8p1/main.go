@@ -23,10 +23,21 @@ func main() {
 
 
 	scanner.Scan()
-	text := scanner.Text()
+	directions := scanner.Text()
+	desertMap := map[string]map[rune]string
 
 	for scanner.Scan() {
 		text := scanner.Text()
-		println(text)
+		node, children, _ := strings.Cut(text, " = ")
+		L, R, _ := strings.Cut(children, ", ")
+		desertMap[node] = map[rune]string{'L': L[1:], 'R': R[:len(R)-1]}
+	}
+	loc := "AAA"
+	steps := 0
+	for loc != "ZZZ" {
+		for _, d := range directions {
+			steps += 1
+			loc = desertMap[loc][d]
+		}
 	}
 }
