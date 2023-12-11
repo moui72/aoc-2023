@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"moui72/aoc-2023/util"
 	"regexp"
 	"slices"
@@ -48,12 +47,9 @@ func scoreCard(card string) int {
 
 func main() {
 	fmt.Printf("Loading data from %s\n", path)
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
 	grandScore := 0
 	card := 1
 	for scanner.Scan() {

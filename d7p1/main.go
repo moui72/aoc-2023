@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"moui72/aoc-2023/util"
 	"slices"
 	"strings"
@@ -114,12 +113,9 @@ func determineHandType(hand string) string {
 
 func main() {
 	fmt.Printf("Loading data from %s\n", path)
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	games := []map[string]string{}
 

@@ -12,11 +12,9 @@ var path string = util.RelativePathTo("inputs/d3.txt")
 var digits string = "0123456789"
 
 func main() {
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	total := 0
 	for scanner.Scan() {
 		line := scanner.Text()

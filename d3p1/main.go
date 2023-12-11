@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"moui72/aoc-2023/util"
 	"strconv"
 )
@@ -44,11 +43,9 @@ func isPart(row, colStart, colEnd int, symbolMap [][]int) bool {
 
 func main() {
 
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	symbolLocations := make([][]int, util.LineCount(path))
 	numberLocations := make([][][]int, util.LineCount(path))
 	numbersByAddress := map[string]int{}

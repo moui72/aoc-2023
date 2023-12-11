@@ -35,11 +35,9 @@ func main() {
 		"nine": 9,
 		"zero": 0,
 	}
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	total := 0
 	for scanner.Scan() {
 		line := scanner.Text()

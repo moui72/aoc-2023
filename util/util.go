@@ -2,10 +2,10 @@ package util
 
 import (
 	"bufio"
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 // ReverseRunes returns its argument string reversed rune-wise left to right.
@@ -17,21 +17,18 @@ func ReverseRunes(s string) string {
     return string(r)
 }
 
-func ReadFileToScanner(path string) (*os.File, *bufio.Scanner, error) {
+func ReadFileToScanner(path string) (*os.File, *bufio.Scanner) {
 	file, err := os.Open(path)
 	if err != nil {
-			return file, nil, err
+			panic(err)
 	}
 	scanner := bufio.NewScanner(file)
-	return file, scanner, nil
+	return file, scanner
 }
 
 func LineCount(path string) int {
-	f, scanner, err := ReadFileToScanner(path)
+	f, scanner := ReadFileToScanner(path)
 	defer f.Close()
-	if err != nil {
-			log.Fatal(err)
-	}
 	n := 0
 	for scanner.Scan() {
 		n += 1
@@ -47,6 +44,14 @@ func GetCurrentFilePath() string {
 func RelativePathTo(path string) string {
 	return filepath.Join(GetCurrentFilePath(), path)
 }
+
+func PathFromFileName(filename string) string {
+	if ! strings.HasSuffix(filename, ".txt") {
+		filename += ".txt"
+	}
+	return filepath.Join(GetCurrentFilePath(), "inputs", filename)
+}
+
 
 func ParseIntOrRaise(input string) int {
 	str, err := strconv.Atoi(input)

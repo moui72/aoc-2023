@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"moui72/aoc-2023/util"
 	"strconv"
 	"strings"
@@ -30,12 +29,9 @@ func parseAlmanacEntry(input string) (int, int, int) {
 
 func main() {
 	fmt.Printf("Loading data from %s\n", path)
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
 	building := ""
 	almanac := make(map[string]map[string][]map[string]int)
 	mapOrder := map[string]string{}

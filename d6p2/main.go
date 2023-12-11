@@ -3,13 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"moui72/aoc-2023/util"
 	"regexp"
 	"strings"
 )
 
-var path string = util.RelativePathTo("inputs/d6.txt")
+var path string = util.RelativePathTo("inputs/d8_test.txt")
 
 func determineResult(charge, totalTime int) int {
 	return charge * (totalTime - charge)
@@ -52,11 +51,9 @@ func parseRaces(scanner *bufio.Scanner) []map[string]int {
 
 func main() {
 	fmt.Printf("Loading data from %s\n", path)
-	f, scanner, err := util.ReadFileToScanner(path)
+	f, scanner := util.ReadFileToScanner(path)
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	races := parseRaces(scanner)
 	margin := 1
 	for _, race := range races {
