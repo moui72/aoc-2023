@@ -6,9 +6,21 @@ import (
 	"os"
 	"slices"
 	"strings"
-
-	"github.com/davecgh/go-spew/spew"
 )
+
+func printMap(m []string, numbers bool) {
+	if numbers {
+		numLine := strings.Repeat("0123456789", len(m[0]) / 10 + 1)
+		fmt.Printf("\t%s\n", numLine[:len(m[0])])
+	}
+	println()
+	for row, s := range m {
+		if numbers {
+			fmt.Printf("%5d\t", row)
+		}
+		println(s)
+	}
+}
 
 func replaceAtIndex(in, rep string, index int) string {
 	return in[:index] + rep + in[index+1:]
@@ -205,11 +217,11 @@ func main() {
 		}
 		steps += 1
 	}
+	
+	printMap(simpleMap, true)
 	inside := 0
-	println("\t0123456789")
-	for row, symbols := range simpleMap {
-		fmt.Printf("%d\t%s\n", row, symbols)
-	}
+	height := len(simpleMap)
+	width := len(simpleMap[0])
 	for row, symbols := range simpleMap {
 		for col, symbol := range symbols {
 			if symbol == '+' {
@@ -232,6 +244,7 @@ func main() {
 					case 'F':
 						if ! leftOpen {
 							crossings["up"]++
+							leftOpen = true
 						}
 						rightOpen = true
 					case 'L':
@@ -239,15 +252,16 @@ func main() {
 					case '7':
 						if ! rightOpen {
 							crossings["up"]++
+							rightOpen = true
 						}
 						leftOpen = true
 					}
 				}
 				upOpen := true
 				downOpen := true
-				for i := col+1; i < len(symbols)-1; i++ {
+				for i := col+1; i < width; i++ {
 					// moving right
-					pipe := simpleMap[i][col]
+					pipe := simpleMap[row][i]
 					switch (pipe) {
 					case '|':
 						crossings["right"]++
@@ -256,6 +270,7 @@ func main() {
 					case 'J':
 						if ! downOpen {
 							crossings["right"]++
+							downOpen = true
 						}
 						upOpen = true
 					case 'L':
@@ -263,13 +278,15 @@ func main() {
 					case '7':
 						if ! upOpen {
 							crossings["right"]++
+							upOpen = true
+
 						}
 						downOpen = true
 					}
 				}
 				leftOpen = true
 				rightOpen = true
-				for i := row+1; i < len(simpleMap)-1; i++ {
+				for i := row+1; i < height; i++ {
 					// moving down
 					pipe := simpleMap[i][col]
 					switch (pipe) {
@@ -280,6 +297,7 @@ func main() {
 					case 'L':
 						if ! leftOpen {
 							crossings["down"]++
+							leftOpen = true
 						}
 						rightOpen = true
 					case 'F':
@@ -287,7 +305,8 @@ func main() {
 					case 'J':
 						if ! rightOpen {
 							crossings["down"]++
-						}
+							rightOpen = true
+					}
 						leftOpen = true
 					}
 				}
@@ -295,7 +314,7 @@ func main() {
 				downOpen = true
 				for i := col-1; i >= 0; i-- {
 					// moving left
-					pipe := simpleMap[i][col]
+					pipe := simpleMap[row][i]
 					switch (pipe) {
 					case '|':
 						crossings["left"]++
@@ -304,6 +323,7 @@ func main() {
 					case 'L':
 						if ! downOpen {
 							crossings["left"]++
+							downOpen = true
 						}
 						upOpen = true
 					case 'J':
@@ -311,14 +331,13 @@ func main() {
 					case 'F':
 						if ! upOpen {
 							crossings["left"]++
+							upOpen = true
 						}
 						downOpen = true
 					}
 				}
 				oddCrossings := 0
-				spew.Dump(crossings)
 				for _, count := range crossings {
-					println(row, col)
 					if count == 0 {
 						oddCrossings = 0
 						break
@@ -330,16 +349,12 @@ func main() {
 					if oddCrossings > 0 {
 						inOutMap[row] = replaceAtIndex(inOutMap[row], "i", col)
 						inside++
-						fmt.Printf("Tile at position %d, %d is inside\n", row, col)
 					}
 			} else {
 				inOutMap[row] = replaceAtIndex(inOutMap[row], "+", col)
 			}
 		}
 	}
-	println("\t0123456789")
-	for row, symbols := range inOutMap {
-		fmt.Printf("%d\t%s\n", row, symbols)
-	}
+	printMap(inOutMap, true)
 	fmt.Printf("\nThere are %d tiles inside the loop\n", inside)
 }
